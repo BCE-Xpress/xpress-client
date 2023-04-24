@@ -1,6 +1,6 @@
 ﻿namespace UserMaintenance
 {
-    partial class alkalmazas
+    partial class Alkalmazás
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(alkalmazas));
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Alkalmazás));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -51,8 +52,10 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -79,7 +82,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label3.Location = new System.Drawing.Point(536, 133);
+            this.label3.Location = new System.Drawing.Point(552, 133);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(231, 28);
             this.label3.TabIndex = 2;
@@ -212,6 +215,8 @@
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(84, 23);
             this.textBox5.TabIndex = 16;
+            this.textBox5.Validating += new System.ComponentModel.CancelEventHandler(this.textBox5_Validating);
+            this.textBox5.Validated += new System.EventHandler(this.textBox5_Validated);
             // 
             // textBox6
             // 
@@ -219,6 +224,8 @@
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(104, 23);
             this.textBox6.TabIndex = 17;
+            this.textBox6.Validating += new System.ComponentModel.CancelEventHandler(this.textBox6_Validating);
+            this.textBox6.Validated += new System.EventHandler(this.textBox6_Validated);
             // 
             // textBox7
             // 
@@ -257,6 +264,10 @@
             this.label8.TabIndex = 21;
             this.label8.Text = "Keresés";
             // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
             // alkalmazas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -293,6 +304,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -322,5 +334,6 @@
         private Button button2;
         private PictureBox pictureBox1;
         private Label label8;
+        private ErrorProvider errorProvider1;
     }
 }
