@@ -268,7 +268,7 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
-            // alkalmazas
+            // Alkalmazás
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -296,7 +296,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Name = "alkalmazas";
+            this.Name = "Alkalmazás";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "alkalmazas";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.alkalmazas_FormClosed);
