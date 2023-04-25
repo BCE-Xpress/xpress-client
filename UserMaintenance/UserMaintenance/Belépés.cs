@@ -2,7 +2,7 @@ namespace UserMaintenance
 {
     public partial class Belépés : Form
     {
-        string jelszo = "202223";
+        string jelszo = "0";
         public Belépés()
         {
             InitializeComponent();
