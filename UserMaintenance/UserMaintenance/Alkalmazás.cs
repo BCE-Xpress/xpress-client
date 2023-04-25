@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace UserMaintenance
 {
@@ -23,32 +24,32 @@ namespace UserMaintenance
             button1.BackColor = Color.FromArgb(255, 183, 3);
             button2.BackColor = Color.FromArgb(255, 183, 3);
             this.Text = "Alkalmazás";
-            public string API_URL = "http://20.234.113.211:8087/DesktopModules/Hotcakes/API/rest/v1/";
-            public string API_KEY = "1-2512619e-41b7-4f9d-af71-663bdb72c425";
-            public string PRODUCTS = "products";
-            public string STOCK = "ProductInventory";
-        }
-      async void LoadDataFromAPI(API_URL, API_KEY, TYPE)
-        {
-            static readonly HttpClient client = new HttpClient();
-            try
-            {
-                HttpResponseMessage response = await client.GetAsync($"{API_URL}{TYPE}?key{API_KEY}");
-                response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(responseBody);
-            }
-            catch (HttpRequestException e)
-            {
-                Console.WriteLine($"Error: {e.Message}");
-            }
-        }
+            AllocConsole();
 
-        private void alkalmazas_Load(object sender, EventArgs e)
-        {
-            LoadDataFromAPI(API_URL, API_KEY, TYPE);
         }
+   
+   
 
+        private async void alkalmazas_Load(object sender, EventArgs e)
+        {
+            DateTime localDate = DateTime.Now;
+            Console.WriteLine(localDate);
+            Console.WriteLine("XPRESS CLIENT STARTED");
+            Console.WriteLine("------------------------------------------------------------------------");
+            Console.WriteLine("LOADING DATA FROM HOTCAKES API...");
+            
+            var response = await ApiHelper.GetAllProducts();
+            Console.WriteLine(response.Substring(0,1531));
+
+            if (response == "")
+            {
+                Console.WriteLine("------------------------------------------------------------------------");
+                Console.WriteLine("HIBA TÖRTÉNT AZ API KÉRÉS KÖZBEN");
+                return;
+            }
+            listBox1.Text = response;
+        }
+      
         private void alkalmazas_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
@@ -89,6 +90,9 @@ namespace UserMaintenance
         {
             errorProvider1.SetError(textBox6, string.Empty);
         }
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
 
     }
 }
