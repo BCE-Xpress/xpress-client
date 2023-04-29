@@ -17,6 +17,7 @@ namespace UserMaintenance
 
         }
         Root root;
+		RootInventory rootInventory;
 
 
         private async void alkalmazas_Load(object sender, EventArgs e)
@@ -26,7 +27,10 @@ namespace UserMaintenance
             Console.WriteLine("XPRESS CLIENT STARTED");
             Console.WriteLine("------------------------------------------------------------------------");
             Console.WriteLine("LOADING DATA FROM HOTCAKES API...");
+            
             root = await ApiHelper.GetAllProducts();
+            rootInventory = await ApiHelper.GetAllProductInventory();
+            
             if (root.Content == null)
             {
                 Console.WriteLine("------------------------------------------------------------------------");
@@ -37,10 +41,17 @@ namespace UserMaintenance
                 Console.WriteLine("HIBA TÖRTÉNT AZ ADATTAL.");
                 return;
             }
+
+
             foreach (var product in root.Content.Products)
             {
                 listBox1.Items.Add(product.ProductName);
             }
+
+            //foreach (var item in rootInventory.ContentInventory)
+            //{
+            //    Console.WriteLine(item.Bvin);
+            //}
         }
 
         private void alkalmazas_FormClosed(object sender, FormClosedEventArgs e)
@@ -89,11 +100,11 @@ namespace UserMaintenance
 
         private async void button1_Click(object sender, EventArgs e)
         {
-            
-            var response = await ApiHelper.UpdateProduct();
-        }
 
-        private async void textBox1_TextChanged(object sender, EventArgs e)
+			
+		}
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
             
             var kurzusok = from x in root.Content.Products
