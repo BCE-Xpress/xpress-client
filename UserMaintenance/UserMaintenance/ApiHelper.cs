@@ -21,24 +21,31 @@ namespace UserMaintenance
         private static readonly string REQUEST_TYPE_PRODUCT_INVENTORY = "productinventory";
         public static async Task<Root> GetAllProducts()
         {
-            using (HttpClient client = new HttpClient())
+            try
             {
-                using (HttpResponseMessage res = await client.GetAsync($"{API_URL}{API_PATH}{REQUEST_TYPE_PRODUCT}{API_KEY}"))
+                using (HttpClient client = new HttpClient())
                 {
-                    Console.WriteLine("------------------------------------------------------------------------");
-                    Console.WriteLine(res);
-                    using (HttpContent content = res.Content)
+                    using (HttpResponseMessage res = await client.GetAsync($"{API_URL}{API_PATH}{REQUEST_TYPE_PRODUCT}{API_KEY}"))
                     {
-                        string data = await content.ReadAsStringAsync();
+						    Console.WriteLine("------------------------------------------------------------------------");
+						    Console.WriteLine(res);
+                        using (HttpContent content = res.Content)
+                        {
+                            string data = await content.ReadAsStringAsync();
                         
-                        Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(data);
+                            Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(data);
                        
-                        return myDeserializedClass;
-                    }
+                            return myDeserializedClass;
+                        }
 
+                    }
                 }
-            }
-        }
+			}
+			catch (Exception err)
+			{
+				throw err;
+			}
+		}
 		public static async Task<RootInventory> GetAllProductInventory()
 		{
 			using (HttpClient client = new HttpClient())
