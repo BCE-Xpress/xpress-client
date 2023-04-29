@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
+
 namespace UserMaintenance
 {
     public static class ApiHelper
@@ -38,7 +39,27 @@ namespace UserMaintenance
                 }
             }
         }
-        public static async Task<string> UpdateProduct()
+		public static async Task<RootInventory> GetAllProductInventory()
+		{
+			using (HttpClient client = new HttpClient())
+			{
+				using (HttpResponseMessage res = await client.GetAsync($"{API_URL}{API_PATH}{REQUEST_TYPE_PRODUCT_INVENTORY}{API_KEY}"))
+				{
+					Console.WriteLine("------------------------------------------------------------------------");
+					Console.WriteLine(res);
+					using (HttpContent content = res.Content)
+					{
+						string data = await content.ReadAsStringAsync();
+                        
+						RootInventory myDeserializedClass2 = JsonConvert.DeserializeObject<RootInventory>(data);
+
+						return myDeserializedClass2;
+					}
+
+				}
+			}
+		}
+		public static async Task<string> UpdateProduct()
         {
             using (HttpClient client = new HttpClient())
             {
