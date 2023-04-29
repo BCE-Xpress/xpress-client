@@ -6,7 +6,6 @@ namespace UserMaintenance
 {
     public partial class Alkalmazás : Form
     {
-
         public Alkalmazás()
         {
             InitializeComponent();
@@ -17,7 +16,7 @@ namespace UserMaintenance
             AllocConsole();
 
         }
-
+        Root root;
 
 
         private async void alkalmazas_Load(object sender, EventArgs e)
@@ -27,16 +26,18 @@ namespace UserMaintenance
             Console.WriteLine("XPRESS CLIENT STARTED");
             Console.WriteLine("------------------------------------------------------------------------");
             Console.WriteLine("LOADING DATA FROM HOTCAKES API...");
-
-            var response = await ApiHelper.GetAllProducts();
-
-            if (response == null)
+            root = await ApiHelper.GetAllProducts();
+            if (root.Content == null)
             {
                 Console.WriteLine("------------------------------------------------------------------------");
-                Console.WriteLine("HIBA TÖRTÉNT AZ API KÉRÉS KÖZBEN");
+                foreach (var item in root.Errors)
+                {
+                    Console.WriteLine(item);
+                }
+                Console.WriteLine("HIBA TÖRTÉNT AZ ADATTAL.");
                 return;
             }
-            foreach (Product product in response.Content.Products)
+            foreach (var product in root.Content.Products)
             {
                 listBox1.Items.Add(product.ProductName);
             }
@@ -92,9 +93,14 @@ namespace UserMaintenance
             var response = await ApiHelper.UpdateProduct();
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private async void textBox1_TextChanged(object sender, EventArgs e)
         {
             
+            var kurzusok = from x in root.Content.Products
+                           where x.ProductName.Contains(textBox1.Text)
+                           select x;
+            listBox1.DataSource = kurzusok.ToList();
+            listBox1.DisplayMember = "ProductName";
         }
         //private Products CreateProductObject()
         //{
