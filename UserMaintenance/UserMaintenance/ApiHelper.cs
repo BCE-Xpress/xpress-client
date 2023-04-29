@@ -29,7 +29,9 @@ namespace UserMaintenance
                     using (HttpContent content = res.Content)
                     {
                         string data = await content.ReadAsStringAsync();
-                        Root? myDeserializedClass = JsonConvert.DeserializeObject<Root>(data);
+                        
+                        Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(data);
+                       
                         return myDeserializedClass;
                     }
 
