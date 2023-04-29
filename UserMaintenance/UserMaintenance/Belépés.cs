@@ -1,8 +1,11 @@
+using System.Text;
+using XSystem.Security.Cryptography;
+
 namespace UserMaintenance
 {
     public partial class Belépés : Form
     {
-        string jelszo = "0";
+        string valid = "X+zrZv/IbzjZUnhsbWlsecLbwjndTpG0ZynXOif7V+k=";
         public Belépés()
         {
             InitializeComponent();
@@ -16,39 +19,39 @@ namespace UserMaintenance
 
         private void Form1_Load(object sender, EventArgs e)
         {
-          
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-
-            if (textBox1.Text==jelszo)
-            {
-                Alkalmazás alk= new Alkalmazás();
-                alk.Show();
-                Hide();
-            }
-            else
-            {
-                MessageBox.Show("Hibás jelszó!");
-            }
+            Ellenoriz();
         }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
-                if (textBox1.Text == jelszo)
-                {
-                    Alkalmazás alk = new Alkalmazás();
-                    alk.Show();
-                    Hide();
-                }
-                else
-                {
-                    MessageBox.Show("Hibás jelszó!");
-                }
+                Ellenoriz();
+            }
+        }
+
+        private void Ellenoriz()
+        {
+            string jelszo = textBox1.Text;
+            byte[] jelszoBytes = Encoding.UTF8.GetBytes(jelszo);
+            SHA256Managed sha = new SHA256Managed();
+            byte[] hash = sha.ComputeHash(jelszoBytes);
+            string hashString = Convert.ToBase64String(hash);
+
+            if (hashString == valid)
+            {
+                Alkalmazás alk = new Alkalmazás();
+                alk.Show();
+                Hide();
+            }
+            else
+            {
+                MessageBox.Show("Hibás jelszó!");
             }
         }
     }
