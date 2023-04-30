@@ -18,9 +18,10 @@ namespace UserMaintenance
             panel1.BackColor = Color.FromArgb(33, 158, 188);
             button1.BackColor = Color.FromArgb(255, 183, 3);
             label9.BackColor = Color.FromArgb(255, 183, 3);
-            label10.Text = "Adatok lekérére...";
+            label10.Text = "Adatok lekérése...";
             label10.ForeColor = Color.Blue;
             button2.Enabled = false;
+            button1.Enabled = false;
             button2.Text = "Adatok lekérése a szerverről";
             this.Text = "Alkalmazás";
 
@@ -59,6 +60,7 @@ namespace UserMaintenance
             label10.Text = "Adatok lekérése sikeres";
             label10.ForeColor = Color.Green;
             button2.Enabled = true;
+            button1.Enabled=true;
 
             // Adatok a listbox
             Szűrés();
@@ -169,7 +171,7 @@ namespace UserMaintenance
         private void Szűrés()
         {
             var kurzusok = from x in root.Content.Products
-                           where x.ProductName.ToLower().Contains(textBox1.Text)
+                           where x.ProductName.ToLower().Contains(textBox1.Text.ToLower())
                            select x;
             listBox1.DataSource = kurzusok.ToList();
             listBox1.DisplayMember = "ProductName";
@@ -264,6 +266,7 @@ namespace UserMaintenance
 
             // gomb letiltása, hogy ne lehessen spammelni az API kérést
             button2.Enabled = false;
+            button1.Enabled=false;
 
             // API hívás
             try
@@ -281,6 +284,7 @@ namespace UserMaintenance
 
             // a gomb legyen akkor is kattintható ha sikeres az API kérés, így kvázi lehet reload-olni a szerverről
             button2.Enabled = true;
+            button1.Enabled = true;
 
             Szűrés();
         }
