@@ -10,14 +10,25 @@ namespace UserMaintenance
 	public partial class Alkalmazás : Form
 	{
 		Timer timer;
-		public Alkalmazás()
+		public Alkalmazás(bool checkBox_konzol)
 		{
 			InitializeComponent();
+		
+			// Alap beállitások
 			panel1.BackColor = Color.FromArgb(33, 158, 188);
 			button1.BackColor = Color.FromArgb(255, 183, 3);
 			label9.BackColor = Color.FromArgb(255, 183, 3);
+			label10.Text = "Adatok lekérére...";
+			label10.ForeColor = Color.Blue;
+			button2.Enabled = false;
+			button2.Text = "Adatok lekérése a szerverről";
 			this.Text = "Alkalmazás";
-			AllocConsole();
+			
+			// konzol nézet
+			if(checkBox_konzol)
+			{
+				AllocConsole();
+			}
 
 
 		}
@@ -27,57 +38,30 @@ namespace UserMaintenance
 
 		private async void alkalmazas_Load(object sender, EventArgs e)
 		{
+			// Alap logok
 			DateTime localDate = DateTime.Now;
 			Console.WriteLine(localDate);
 			Console.WriteLine("XPRESS CLIENT STARTED");
 			Console.WriteLine("------------------------------------------------------------------------");
 			Console.WriteLine("LOADING DATA FROM HOTCAKES API...");
-			label10.Text = "Adatok lekérére...";
-			label10.ForeColor = Color.Blue;
+
+			// API hívás
 			try
 			{
-				root = await ApiHelper.GetAllProducts();
-				rootInventory = await ApiHelper.GetAllProductInventory();
-
+				await LoadProductsAndInventory();
 			}
 			catch (Exception err)
 			{
-				Console.WriteLine("------------------------------------------------------------------------");
-				Console.WriteLine(err);
-				label10.Text = "Hiba történt az adatok lekérése közben :(";
-				label10.ForeColor = Color.Red;
 				return;
 			}
 
-			if (root == null || rootInventory == null)
-			{
-				Console.WriteLine("------------------------------------------------------------------------");
-				foreach (var item in root.Errors)
-				{
-					Console.WriteLine(item);
-				}
-				foreach (var item in rootInventory.ErrorsInventory)
-				{
-					Console.WriteLine(item);
-				}
-				Console.WriteLine("HIBA TÖRTÉNT AZ ADATTAL.");
-				return;
-			}
-
+			// API hívás sikeres, egyébként return
 			label10.Text = "Adatok lekérése sikeres :)";
 			label10.ForeColor = Color.Green;
+			button2.Enabled= true;
 
+			// Adatok a listbox
 			Szűrés();
-
-			//foreach (var product in root.Content.Products)
-			//{
-			//    Console.WriteLine(product.ProductName);
-			//}
-
-			//foreach (var product in rootInventory.Content)
-			//{
-			//    Console.WriteLine(product.Bvin);
-			//}
 		}
 
 
@@ -110,18 +94,12 @@ namespace UserMaintenance
 						}
 						label9.Visible = true;
 						timer.Start();
-
-
 						/////////////
 						//API hívás//
 						/////////////
-
-
-
 					}
 					catch (Exception)
 					{
-
 						throw;
 					}
 				}
@@ -131,7 +109,6 @@ namespace UserMaintenance
 
 		private void textBox1_TextChanged(object sender, EventArgs e)
 		{
-
 			Szűrés();
 		}
 
@@ -185,6 +162,8 @@ namespace UserMaintenance
 
 		private void alkalmazas_FormClosed(object sender, FormClosedEventArgs e)
 		{
+			// TODO ha marad idő rá
+			// biztos kilépsz dialog, ha nem nyomott rá a módosításra akkor megkérdezi menti az változtatásokat, ha igen akkor API Put request
 			Application.Exit();
 		}
 
@@ -224,11 +203,78 @@ namespace UserMaintenance
 			errorProvider1.SetError(textBox6, string.Empty);
 		}
 
-
+		// KONZOL
 		[DllImport("kernel32.dll", SetLastError = true)]
 		[return: MarshalAs(UnmanagedType.Bool)]
 		static extern bool AllocConsole();
+		// KONZOL
 
+		private async void button2_Click(object sender, EventArgs e)
+		{
+			// Gombra kattintás alap beállitások
+			label10.Text = "Adatok lekérére...";
+			label10.ForeColor = Color.Blue;
+
+			// gomb letiltása, hogy ne lehessen spammelni az API kérést
+			button2.Enabled = false;
+
+			// API hívás
+			try
+			{
+				await LoadProductsAndInventory();
+			}
+			catch (Exception err)
+			{
+				return;
+			}
+
+			// API hívás sikeres, ha nem sikeres return, de akkor a gomb úrja kattintható (LoadProductsAndInventory függvényben van írva)
+			label10.Text = "Adatok lekérése sikeres :)";
+			label10.ForeColor = Color.Green;
+
+			// a gomb legyen akkor is kattintható ha sikeres az API kérés, így kvázi lehet reload-olni a szerverről
+			button2.Enabled = true;
+
+			Szűrés();
+		}
+
+		private async Task LoadProductsAndInventory()
+		{
+			try
+			{
+				root = await ApiHelper.GetAllProducts();
+				rootInventory = await ApiHelper.GetAllProductInventory();
+
+			}
+			catch (Exception err)
+			{
+				Console.WriteLine("------------------------------------------------------------------------");
+				Console.WriteLine(err);
+
+				label10.Text = "Hiba történt az adatok lekérése közben :(";
+				label10.ForeColor = Color.Red;
+
+				// Ha sikertelen a request, a gomb újra kattintható lesz az újrapróbálkozáshoz
+				button2.Enabled = true;
+
+				throw err;
+			}
+
+			if (root == null || rootInventory == null)
+			{
+				Console.WriteLine("------------------------------------------------------------------------");
+				foreach (var item in root.Errors)
+				{
+					Console.WriteLine(item);
+				}
+				foreach (var item in rootInventory.ErrorsInventory)
+				{
+					Console.WriteLine(item);
+				}
+				Console.WriteLine("HIBA TÖRTÉNT AZ ADATTAL.");
+				return;
+			}
+		}
 		//private Products CreateProductObject()
 		//{
 		//    return;

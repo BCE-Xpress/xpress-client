@@ -34,6 +34,7 @@
 			label2 = new Label();
 			label3 = new Label();
 			panel1 = new Panel();
+			button2 = new Button();
 			label10 = new Label();
 			pictureBox1 = new PictureBox();
 			textBox1 = new TextBox();
@@ -91,6 +92,7 @@
 			// 
 			// panel1
 			// 
+			panel1.Controls.Add(button2);
 			panel1.Controls.Add(label10);
 			panel1.Controls.Add(pictureBox1);
 			panel1.Controls.Add(label1);
@@ -99,6 +101,16 @@
 			panel1.Name = "panel1";
 			panel1.Size = new Size(817, 101);
 			panel1.TabIndex = 3;
+			// 
+			// button2
+			// 
+			button2.Location = new Point(204, 24);
+			button2.Name = "button2";
+			button2.Size = new Size(106, 23);
+			button2.TabIndex = 3;
+			button2.Text = "button2";
+			button2.UseVisualStyleBackColor = true;
+			button2.Click += button2_Click;
 			// 
 			// label10
 			// 
@@ -354,5 +366,6 @@
 		private ErrorProvider errorProvider1;
 		private Label label9;
 		private Label label10;
+		private Button button2;
 	}
 }
