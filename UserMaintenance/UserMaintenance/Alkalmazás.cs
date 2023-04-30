@@ -85,24 +85,45 @@ namespace UserMaintenance
 							textBox4.Text = textBox7.Text;
 							textBox3.Text = textBox6.Text;
 							checkBox1.Checked = checkBox2.Checked;
+							try
+							{
+								await ApiHelper.UpdateProduct(Bvin, root.Content.Products[i]);
+							}
+							catch (Exception err)
+							{
+								Console.WriteLine("HIBA TÖRTÉNT ADATMÓDOSÍTÁS KÖZBEN");
+								Console.WriteLine(err.Message);
+							}
+
 						}
 						if (rootInventory.Content[i].ProductBvin == Bvin)
 						{
 
 							rootInventory.Content[i].QuantityOnHand = int.Parse(textBox5.Text) + rootInventory.Content[i].QuantityReserved;
 							textBox2.Text = textBox5.Text;
+							try
+							{
+								await ApiHelper.UpdateProductInventory(rootInventory.Content[i].Bvin, rootInventory.Content[i]);
+							}
+							catch (Exception err)
+							{
+								Console.WriteLine("HIBA TÖRTÉNT ADATMÓDOSÍTÁS KÖZBEN");
+								Console.WriteLine(err.Message);
+							}
 						}
 						label9.Visible = true;
 						timer.Start();
-						/////////////
-						//API hívás//
-						/////////////
+						///
+						///
+
 					}
 					catch (Exception)
 					{
 						throw;
 					}
 				}
+				LoadProductsAndInventory();
+				Szűrés();
 			}
 
 		}
@@ -162,8 +183,6 @@ namespace UserMaintenance
 
 		private void alkalmazas_FormClosed(object sender, FormClosedEventArgs e)
 		{
-			// TODO ha marad idő rá
-			// biztos kilépsz dialog, ha nem nyomott rá a módosításra akkor megkérdezi menti az változtatásokat, ha igen akkor API Put request
 			Application.Exit();
 		}
 
@@ -275,10 +294,5 @@ namespace UserMaintenance
 				return;
 			}
 		}
-		//private Products CreateProductObject()
-		//{
-		//    return;
-
-		//}
 	}
 }
