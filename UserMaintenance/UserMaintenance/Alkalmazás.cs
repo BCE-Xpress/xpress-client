@@ -56,7 +56,7 @@ namespace UserMaintenance
 			}
 
 			// API hívás sikeres, egyébként return
-			label10.Text = "Adatok lekérése sikeres :)";
+			label10.Text = "Adatok lekérése sikeres";
 			label10.ForeColor = Color.Green;
 			button2.Enabled= true;
 
@@ -212,7 +212,7 @@ namespace UserMaintenance
 		private async void button2_Click(object sender, EventArgs e)
 		{
 			// Gombra kattintás alap beállitások
-			label10.Text = "Adatok lekérére...";
+			label10.Text = "Adatok lekérése...";
 			label10.ForeColor = Color.Blue;
 
 			// gomb letiltása, hogy ne lehessen spammelni az API kérést
@@ -229,7 +229,7 @@ namespace UserMaintenance
 			}
 
 			// API hívás sikeres, ha nem sikeres return, de akkor a gomb úrja kattintható (LoadProductsAndInventory függvényben van írva)
-			label10.Text = "Adatok lekérése sikeres :)";
+			label10.Text = "Adatok lekérése sikeres";
 			label10.ForeColor = Color.Green;
 
 			// a gomb legyen akkor is kattintható ha sikeres az API kérés, így kvázi lehet reload-olni a szerverről
@@ -251,7 +251,7 @@ namespace UserMaintenance
 				Console.WriteLine("------------------------------------------------------------------------");
 				Console.WriteLine(err);
 
-				label10.Text = "Hiba történt az adatok lekérése közben :(";
+				label10.Text = "Hiba történt az adatok lekérése közben";
 				label10.ForeColor = Color.Red;
 
 				// Ha sikertelen a request, a gomb újra kattintható lesz az újrapróbálkozáshoz
