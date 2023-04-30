@@ -27,9 +27,9 @@ namespace UserMaintenance
                 {
                     using (HttpResponseMessage res = await client.GetAsync($"{API_URL}{API_PATH}{REQUEST_TYPE_PRODUCT}{API_KEY}"))
                     {
-						    Console.WriteLine("------------------------------------------------------------------------");
-						    Console.WriteLine(res);
-                        using (HttpContent content = res.Content)
+						    Console.WriteLine("----------------------------------GET REQUEST PRODUCT---------------------------------");
+						Console.WriteLine($"STATUS: {res.StatusCode} \n HEADERS: {res.Headers}");
+						using (HttpContent content = res.Content)
                         {
                             string data = await content.ReadAsStringAsync();
                         
@@ -48,40 +48,63 @@ namespace UserMaintenance
 		}
 		public static async Task<RootInventory> GetAllProductInventory()
 		{
-			using (HttpClient client = new HttpClient())
+			try
 			{
-				using (HttpResponseMessage res = await client.GetAsync($"{API_URL}{API_PATH}{REQUEST_TYPE_PRODUCT_INVENTORY}{API_KEY}"))
+				using (HttpClient client = new HttpClient())
 				{
-					Console.WriteLine("------------------------------------------------------------------------");
-					Console.WriteLine(res);
-					using (HttpContent content = res.Content)
+					using (HttpResponseMessage res = await client.GetAsync($"{API_URL}{API_PATH}{REQUEST_TYPE_PRODUCT_INVENTORY}{API_KEY}"))
 					{
-						string data = await content.ReadAsStringAsync();
+						Console.WriteLine("-------------------------------GET REQUEST PRODUCTINVENTORY----------------------------------");
+						Console.WriteLine($"STATUS: {res.StatusCode} \n HEADERS: {res.Headers}");
+						using (HttpContent content = res.Content)
+						{
+							string data = await content.ReadAsStringAsync();
                         
-						RootInventory myDeserializedClass2 = JsonConvert.DeserializeObject<RootInventory>(data);
+							RootInventory myDeserializedClass2 = JsonConvert.DeserializeObject<RootInventory>(data);
 
-						return myDeserializedClass2;
+							return myDeserializedClass2;
+						}
+
 					}
-
 				}
 			}
+			catch (Exception err)
+			{
+				throw err;
+			}
 		}
-		public static async Task<string> UpdateProduct()
+		public static async Task UpdateProduct(string bvin, Product updatedProduct)
         {
-            using (HttpClient client = new HttpClient())
-            {
-                using(HttpResponseMessage res = await client.PutAsJsonAsync($"{API_URL}{API_PATH}{REQUEST_TYPE_PRODUCT}{API_KEY}",""))
-                {
-                    Console.WriteLine("------------------------------------------------------------------------");
-                    Console.WriteLine(res);
-                    using (HttpContent content = res.Content)
-                    {
-                        string data = await content.ReadAsStringAsync();
-                        
-                        return data;
-                    }
-                }
-            }
+			try
+			{
+				using (HttpClient client = new HttpClient())
+				{
+					using HttpResponseMessage respone = await client.PostAsJsonAsync($"{API_URL}{API_PATH}{REQUEST_TYPE_PRODUCT}/{bvin}{API_KEY}", updatedProduct);
+					Console.WriteLine("----------------------------------POST REQUEST PRODUCT---------------------------------");
+					Console.WriteLine($"STATUS: {respone.StatusCode} \n HEADERS: {respone.Headers} \n UPDATED PRODUCT BVIN: {bvin} \n UPDATED PRODUCT NAME: {updatedProduct.ProductName}");
+				}
+			}
+			catch (Exception err)
+			{
+				throw err;
+			}
         }
-    }
+		public static async Task UpdateProductInventory(string bvin, ContentInventory updatedProductInventory)
+		{
+			try
+			{
+				using (HttpClient client = new HttpClient())
+				{
+					using HttpResponseMessage respone = await client.PostAsJsonAsync($"{API_URL}{API_PATH}{REQUEST_TYPE_PRODUCT_INVENTORY}/{bvin}{API_KEY}", updatedProductInventory);
+					Console.WriteLine("-------------------------------POST REQUEST PRODUCTINVENTORY----------------------------------");
+					Console.WriteLine($"STATUS: {respone.StatusCode} \n HEADERS: {respone.Headers} \n UPDATED PRODUCT BVIN: {bvin}");
+				}
+			}
+			catch (Exception err)
+			{
+				throw err;
+			}
+			
+		}
+	}
 }
