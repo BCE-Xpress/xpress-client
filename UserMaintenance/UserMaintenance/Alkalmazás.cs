@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using XAct;
 using Timer = System.Windows.Forms.Timer;
 
+
 namespace UserMaintenance
 {
     public partial class Alkalmazás : Form
@@ -175,12 +176,16 @@ namespace UserMaintenance
                            select x;
             listBox1.DataSource = kurzusok.ToList();
             listBox1.DisplayMember = "ProductName";
+
         }
+ 
 
         private void Timer_Tick(object? sender, EventArgs e)
         {
+
             label9.Visible = false;
             timer.Stop();
+
         }
 
         private void alkalmazas_FormClosed(object sender, FormClosedEventArgs e)
