@@ -16,7 +16,7 @@ public record User(string Firstname, string Lastname)
 
 }
 
-namespace KliensTest.Tesztek
+namespace UserMaintenance.Tesztek
 {
     public class UserManagement
     {
@@ -25,11 +25,11 @@ namespace KliensTest.Tesztek
         private int idCounter = 1;
 
         public IEnumerable<User> AllUsers => _users;
-        
+
 
         public void Add(User user)
         {
-            _users.Add(user with {Id = idCounter++});
+            _users.Add(user with { Id = idCounter++ });
         }
 
         public void VerifyName(int userID)
