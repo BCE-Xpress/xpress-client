@@ -61,7 +61,7 @@ namespace UserMaintenance
             label10.Text = "Adatok lekérése sikeres";
             label10.ForeColor = Color.Green;
             button2.Enabled = true;
-            button1.Enabled=true;
+            button1.Enabled = true;
 
             // Adatok a listbox
             Szűrés();
@@ -178,7 +178,7 @@ namespace UserMaintenance
             listBox1.DisplayMember = "ProductName";
 
         }
- 
+
 
         private void Timer_Tick(object? sender, EventArgs e)
         {
@@ -271,7 +271,7 @@ namespace UserMaintenance
 
             // gomb letiltása, hogy ne lehessen spammelni az API kérést
             button2.Enabled = false;
-            button1.Enabled=false;
+            button1.Enabled = false;
 
             // API hívás
             try

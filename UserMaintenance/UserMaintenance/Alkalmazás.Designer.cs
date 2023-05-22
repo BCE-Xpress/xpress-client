@@ -220,6 +220,7 @@
             // checkBox2
             // 
             checkBox2.AutoSize = true;
+            checkBox2.Enabled = false;
             checkBox2.Location = new Point(663, 373);
             checkBox2.Name = "checkBox2";
             checkBox2.Size = new Size(58, 19);
